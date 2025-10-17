@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Offre - {{ offre.titre }} | RH Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #796ACD 0%, #3B82F6 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Card -->
+        <div class="gradient-bg text-white rounded-t-xl p-6 md:p-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold">{{ offre.titre }}</h1>
+                    <div class="flex items-center mt-2 space-x-4">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">
+                            {{ offre.get_categorie_display }}
+                        </span>
+                        <span class="text-white/90">
+                            <i class="fas fa-map-marker-alt mr-1"></i> {{ offre.localisation|default:"Non spécifié" }}
+                        </span>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0 flex space-x-3">
+                    <a href="{% url 'telecharger_offre_pdf' offre.id %}" 
+                       class="bg-white text-indigo-600 hover:bg-gray-100 px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> PDF
+                    </a>
+                    <a href="{% url 'liste_offres' %}" 
+                       class="bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i> Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="bg-white card-shadow rounded-b-xl divide-y">
+            <!-- Description Section -->
+            <div class="p-6 md:p-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-align-left text-indigo-500 mr-3"></i> Description du poste
+                </h2>
+                <div class="prose max-w-none text-gray-600">
+                    {{ offre.description|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Details Section -->
+            <div class="p-6 md:p-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-info-circle text-indigo-500 mr-3"></i> Détails de l'offre
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Type de contrat</h3>
+                            <p class="mt-1 text-gray-900">{{ offre.type_contrat|default:"Non spécifié" }}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Salaire proposé</h3>
+                            <p class="mt-1 text-gray-900">
+                                {% if offre.salaire %}
+                                    {{ offre.salaire }} MAD
+                                {% else %}
+                                    Non spécifié
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Expérience requise</h3>
+                            <p class="mt-1 text-gray-900">{{ offre.experience_requise|default:"Non spécifiée" }}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Nombre de postes</h3>
+                            <p class="mt-1 text-gray-900">{{ offre.nombre_postes }}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Niveau d'étude</h3>
+                            <p class="mt-1 text-gray-900">{{ offre.niveau_etude|default:"Non spécifié" }}</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500">Date d'expiration</h3>
+                            <p class="mt-1 text-gray-900">
+                                {{ offre.date_expiration }} 
+                                {% if offre.is_active %}
+                                    <span class="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded">Active</span>
+                                {% else %}
+                                    <span class="ml-2 bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded">Expirée</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exigences Section -->
+            <div class="p-6 md:p-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-tasks text-indigo-500 mr-3"></i> Exigences et compétences
+                </h2>
+                <div class="prose max-w-none text-gray-600">
+                    {{ offre.exigences|default:"Aucune exigence spécifique mentionnée."|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="p-6 md:p-8 bg-gray-50 rounded-b-xl flex flex-col sm:flex-row justify-between items-center">
+                <div class="text-sm text-gray-500 mb-4 sm:mb-0">
+                    Offre publiée le {{ offre.date_publication }}
+                </div>
+                <div class="flex space-x-3">
+                    <a href="{% url 'telecharger_offre_pdf' offre.id %}" 
+                       class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Télécharger
+                    </a>
+                    <a href="{% url 'liste_offres' %}" 
+                       class="bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i> Retour aux offres
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

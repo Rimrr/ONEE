@@ -1,0 +1,194 @@
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer un RH | ONEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0066b3;
+            --primary-dark: #005599;
+            --error: #e63946;
+            --error-light: #fee2e2;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 102, 179, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+        }
+
+        .delete-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            text-align: center;
+            border-top: 4px solid var(--error);
+        }
+
+        .delete-header {
+            padding: 1.5rem;
+            background-color: var(--error-light);
+        }
+
+        .delete-header h2 {
+            margin: 0;
+            color: var(--error);
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .delete-body {
+            padding: 2rem;
+        }
+
+        .delete-message {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .delete-message strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .user-icon {
+            font-size: 3rem;
+            color: var(--error);
+            margin-bottom: 1rem;
+            background-color: var(--error-light);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-text {
+            color: var(--error);
+            font-weight: 500;
+            margin: 1.5rem 0;
+            padding: 0.75rem;
+            background-color: var(--error-light);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--error);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.75rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 150px;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 10px rgba(220, 38, 38, 0.2);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .delete-container {
+                margin: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="delete-container">
+        <div class="delete-header">
+            <h2>
+                <i class="fas fa-user-slash"></i>
+                Supprimer un RH
+            </h2>
+        </div>
+        
+        <div class="delete-body">
+            <div class="user-icon">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            
+            <p class="delete-message">
+                Vous êtes sur le point de supprimer le compte RH de<br>
+                <strong>{{ rh.prenom }} {{ rh.nom }}</strong>
+            </p>
+            
+            <div class="warning-text">
+                <i class="fas fa-exclamation-triangle"></i> Cette action supprimera définitivement tous les données associées à ce compte.
+            </div>
+            
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Confirmer
+                    </button>
+                    <a href="{% url 'liste_rh' %}" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

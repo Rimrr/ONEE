@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard ONEE{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- ░░ Logo centré en haut ░░ -->
+    <div class="w-full bg-white py-0 shadow-md flex justify-center">
+        <img src="https://media.licdn.com/dms/image/v2/D4E3DAQF1yCjYseaNzQ/image-scale_191_1128/image-scale_191_1128/0/1723823935433/office_national_de_llectricit_et_de_leau_potable_onee_cover?e=2147483647&v=beta&t=DBt6O9TtsdbNL51iwPYsfvvdMUmB7KjB5A8nNQaRXgU" alt="Logo ONEE" class="h-16 w-auto">
+    </div>
+
+    <!-- ░░ Structure principale avec sidebar + contenu ░░ -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 min-h-screen bg-white shadow-xl hidden md:block">
+            <div class="p-6 flex items-center gap-2">
+                <img src="{% static 'images/oneelogo.jpeg' %}" alt="Logo" class="h-10">
+                <span class="font-bold text-xl text-blue-700">ONEE Admin</span>
+            </div>
+            <nav class="mt-8 space-y-2 px-6">
+                <a href="{% url 'rhe_dashboard' %}"
+                   class="block py-2 px-3 rounded-lg hover:bg-blue-50 {% if request.path == '/dashboard/' %}bg-blue-100 font-semibold{% endif %}">
+                   Tableau de bord
+                </a>
+                <a href="{% url 'liste_rh' %}"          class="block py-2 px-3 rounded-lg hover:bg-blue-50">RH</a>
+                <a href="{% url 'liste_offres' %}"      class="block py-2 px-3 rounded-lg hover:bg-blue-50">Offres</a>
+                <a href="{% url 'rh_logout' %}"         class="block py-2 px-3 rounded-lg hover:bg-red-50 text-red-600">Déconnexion</a>
+            </nav>
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="flex-1 p-6 md:p-10">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

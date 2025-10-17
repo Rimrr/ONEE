@@ -1,0 +1,567 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription Candidat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066b3;
+            --primary-dark: #005599;
+            --primary-light: #e6f2fa;
+            --secondary: #ff6b00;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --background: #f5f7ff;
+            --success: #28a745;
+            --error: #e63946;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 102, 179, 0.2);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('https://images.unsplash.com/photo-1521791055366-0d553872125f?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(0, 102, 179, 0.1);
+            padding: 2rem;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 1000px; /* Conteneur plus large */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            animation: fadeInUp 0.6s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .illustration-side {
+            background: linear-gradient(135deg, var(--primary), #38b6ff);
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illustration-side::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .illustration-side::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .onee-logo {
+            width: 180px;
+            margin-bottom: 2rem;
+            z-index: 1;
+        }
+
+        .illustration-img {
+            width: 70%;
+            max-width: 280px;
+            margin-bottom: 2rem;
+            z-index: 1;
+        }
+
+        .illustration-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            z-index: 1;
+        }
+
+        .illustration-text {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            z-index: 1;
+        }
+
+        .form-side {
+            padding: 3rem;
+            position: relative;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .form-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #f9fafb;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background-color: white;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 102, 179, 0.1);
+            grid-column: span 2;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 102, 179, 0.15);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+            grid-column: span 2;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .messages {
+            grid-column: span 2;
+            margin: 0 0 1.5rem;
+            padding: 0;
+            list-style: none;
+        }
+
+        .messages li {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .error {
+            background-color: #fee2e2;
+            color: var(--error);
+            border-left: 4px solid var(--error);
+        }
+
+        .success {
+            background-color: #dcfce7;
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+            
+            .illustration-side {
+                display: none;
+            }
+            
+            .form-side {
+                padding: 2rem;
+            }
+            
+            .form-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .btn-register, .login-link {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .form-side {
+                padding: 1.5rem;
+            }
+            
+            .form-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="illustration-side">
+            <img src="https://www.fedenerg.ma/wp-content/uploads/2020/05/ONEE.png" alt="ONEE Logo" class="onee-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Candidate Illustration" class="illustration-img">
+            <h3 class="illustration-title">Rejoignez notre équipe</h3>
+            <p class="illustration-text">Postulez aux offres d'emploi de l'ONEE</p>
+        </div>
+        
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Inscription Candidat</h2>
+                <p>Remplissez le formulaire pour créer votre compte</p>
+            </div>
+            
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            
+            <form method="post" id="registerForm">
+                {% csrf_token %}
+                
+                <div class="form-body">
+                    {% if form.non_field_errors %}
+                        <div class="form-group full-width">
+                            <div class="error-message">{{ form.non_field_errors }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.nom.id_for_label }}">Nom</label>
+                        <input type="text" name="{{ form.nom.name }}" id="{{ form.nom.id_for_label }}" 
+                               class="form-control" placeholder="Votre nom" required
+                               value="{{ form.nom.value|default_if_none:'' }}">
+                        {% if form.nom.errors %}
+                            <div class="error-message">{{ form.nom.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.prenom.id_for_label }}">Prénom</label>
+                        <input type="text" name="{{ form.prenom.name }}" id="{{ form.prenom.id_for_label }}" 
+                               class="form-control" placeholder="Votre prénom" required
+                               value="{{ form.prenom.value|default_if_none:'' }}">
+                        {% if form.prenom.errors %}
+                            <div class="error-message">{{ form.prenom.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">Email</label>
+                        <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" 
+                               class="form-control" placeholder="exemple@email.com" required
+                               value="{{ form.email.value|default_if_none:'' }}">
+                        {% if form.email.errors %}
+                            <div class="error-message">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.telephone.id_for_label }}">Téléphone</label>
+                        <input type="tel" name="{{ form.telephone.name }}" id="{{ form.telephone.id_for_label }}" 
+                               class="form-control" placeholder="+212 6 12 34 56 78"
+                               value="{{ form.telephone.value|default_if_none:'' }}">
+                        {% if form.telephone.errors %}
+                            <div class="error-message">{{ form.telephone.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.date_naissance.id_for_label }}">Date de naissance</label>
+                        <input type="date" name="{{ form.date_naissance.name }}" id="{{ form.date_naissance.id_for_label }}" 
+                               class="form-control"
+                               value="{{ form.date_naissance.value|default_if_none:'' }}">
+                        {% if form.date_naissance.errors %}
+                            <div class="error-message">{{ form.date_naissance.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.sexe.id_for_label }}">Sexe</label>
+                        <select name="{{ form.sexe.name }}" id="{{ form.sexe.id_for_label }}" class="form-control">
+                            {% for value, label in form.sexe.field.choices %}
+                                <option value="{{ value }}" {% if form.sexe.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.sexe.errors %}
+                            <div class="error-message">{{ form.sexe.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.mot_de_passe.id_for_label }}">Mot de passe</label>
+                        <input type="password" name="{{ form.mot_de_passe.name }}" id="{{ form.mot_de_passe.id_for_label }}" 
+                               class="form-control" placeholder="••••••••" required>
+                        <span class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        {% if form.mot_de_passe.errors %}
+                            <div class="error-message">{{ form.mot_de_passe.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.confirmer_mot_de_passe.id_for_label }}">Confirmer mot de passe</label>
+                        <input type="password" name="{{ form.confirmer_mot_de_passe.name }}" 
+                               id="{{ form.confirmer_mot_de_passe.id_for_label }}" 
+                               class="form-control" placeholder="••••••••" required>
+                        <span class="password-toggle" id="toggleConfirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        {% if form.confirmer_mot_de_passe.errors %}
+                            <div class="error-message">{{ form.confirmer_mot_de_passe.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="{{ form.titre_profil.id_for_label }}">Titre du profil</label>
+                        <input type="text" name="{{ form.titre_profil.name }}" id="{{ form.titre_profil.id_for_label }}" 
+                               class="form-control" placeholder="Ex: Ingénieur Électrique"
+                               value="{{ form.titre_profil.value|default_if_none:'' }}">
+                        {% if form.titre_profil.errors %}
+                            <div class="error-message">{{ form.titre_profil.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="{{ form.resume_professionnel.id_for_label }}">Résumé professionnel</label>
+                        <textarea name="{{ form.resume_professionnel.name }}" 
+                                  id="{{ form.resume_professionnel.id_for_label }}" 
+                                  class="form-control" 
+                                  placeholder="Décrivez votre expérience et compétences...">{{ form.resume_professionnel.value|default_if_none:'' }}</textarea>
+                        {% if form.resume_professionnel.errors %}
+                            <div class="error-message">{{ form.resume_professionnel.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.linkedin_url.id_for_label }}">LinkedIn (optionnel)</label>
+                        <input type="url" name="{{ form.linkedin_url.name }}" id="{{ form.linkedin_url.id_for_label }}" 
+                               class="form-control" placeholder="https://linkedin.com/in/votre-profil"
+                               value="{{ form.linkedin_url.value|default_if_none:'' }}">
+                        {% if form.linkedin_url.errors %}
+                            <div class="error-message">{{ form.linkedin_url.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.github_url.id_for_label }}">GitHub (optionnel)</label>
+                        <input type="url" name="{{ form.github_url.name }}" id="{{ form.github_url.id_for_label }}" 
+                               class="form-control" placeholder="https://github.com/votre-profil"
+                               value="{{ form.github_url.value|default_if_none:'' }}">
+                        {% if form.github_url.errors %}
+                            <div class="error-message">{{ form.github_url.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn-register">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </button>
+                    
+                    <div class="login-link">
+                        Déjà inscrit ? <a href="{% url 'candidat_login' %}">Connectez-vous ici</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Password toggle functionality
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('{{ form.mot_de_passe.id_for_label }}');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Confirm password toggle functionality
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('{{ form.confirmer_mot_de_passe.id_for_label }}');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            let valid = true;
+            
+            // Check required fields
+            document.querySelectorAll('[required]').forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'var(--error)';
+                    valid = false;
+                }
+            });
+            
+            // Check password match
+            const password = document.getElementById('{{ form.mot_de_passe.id_for_label }}');
+            const confirmPassword = document.getElementById('{{ form.confirmer_mot_de_passe.id_for_label }}');
+            
+            if (password.value !== confirmPassword.value) {
+                password.style.borderColor = 'var(--error)';
+                confirmPassword.style.borderColor = 'var(--error)';
+                valid = false;
+            }
+            
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+
+        // Reset error states on input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.style.borderColor = '#e5e7eb';
+            });
+        });
+    </script>
+</body>
+</html>

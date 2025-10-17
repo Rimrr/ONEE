@@ -1,0 +1,204 @@
+{% extends "base_dashboard.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des RH</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: #4a4a4a;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        .title-container {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 5px solid #1976d2;
+            position: relative;
+            overflow: hidden;
+        }
+        .title-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%231976d2" opacity="0.1"><path d="M30,10 Q50,5 70,10 T90,30 Q95,50 90,70 T70,90 Q50,95 30,90 T10,70 Q5,50 10,30 T30,10Z"/></svg>');
+            background-size: contain;
+            opacity: 0.3;
+        }
+        h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 500;
+            font-size: 1.5em;
+            position: relative;
+            z-index: 1;
+        }
+        .subtitle {
+            color: #546e7a;
+            font-size: 1em;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+        a {
+            color: #1976d2;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: #0d47a1;
+        }
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            background: #1976d2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            margin: 0 0 30px 0;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(25, 118, 210, 0.2);
+        }
+        .add-btn:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(25, 118, 210, 0.3);
+        }
+        .add-btn i {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid #eceff1;
+        }
+        th {
+            background: #f5f7fa;
+            color: #455a64;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background-color: #f8fafc;
+        }
+        .action-links {
+            display: flex;
+            gap: 10px;
+        }
+        .action-links a {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            transition: all 0.2s ease;
+        }
+        .modifier {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .supprimer {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        .modifier:hover {
+            background: #bbdefb;
+        }
+        .supprimer:hover {
+            background: #ffcdd2;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #90a4ae;
+        }
+        .empty-state i {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #cfd8dc;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <h1>Gestion des Ressources Humaines</h1>
+            <div class="subtitle">Administration du personnel et des collaborateurs</div>
+        </div>
+        
+        <a href="{% url 'ajouter_rh' %}" class="add-btn">
+            <i class="fas fa-user-plus"></i> Ajouter un RH
+        </a>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Matricule</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rh in rhs %}
+                    <tr>
+                        <td>{{ rh.nom }}</td>
+                        <td>{{ rh.prenom }}</td>
+                        <td>{{ rh.matricule }}</td>
+                        <td>{{ rh.email }}</td>
+                        <td class="action-links">
+                            <a href="{% url 'modifier_rh' rh.id %}" class="modifier">
+                                <i class="fas fa-edit"></i> Modifier
+                            </a>
+                            <a href="{% url 'supprimer_rh' rh.id %}" class="supprimer">
+                                <i class="fas fa-trash-alt"></i> Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-users"></i><br>
+                            Aucun RH enregistré pour le moment
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

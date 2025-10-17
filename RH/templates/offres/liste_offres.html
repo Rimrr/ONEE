@@ -1,0 +1,10 @@
+<h1>Liste des Offres</h1>
+<div class="offres">
+    {% for offre in offres %}
+        <div class="offre-card">
+            <h2>{{ offre.titre }}</h2>
+            <p>{{ offre.description|truncatewords:20 }}</p>
+            <a href="{% url 'api_candidatures' offre.id %}">Voir les candidatures</a>
+        </div>
+    {% endfor %}
+</div>

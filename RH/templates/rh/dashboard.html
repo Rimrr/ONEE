@@ -1,0 +1,335 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard RH | ONEE</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .sidebar-link {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .sidebar-link:hover {
+      transform: translateX(5px);
+    }
+    .sidebar-link.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .sidebar-link.active:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background-color: white;
+    }
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gradient-to-b from-blue-800 to-blue-900 text-white flex flex-col p-4 shadow-xl">
+      <div class="text-2xl font-bold mb-10 flex items-center gap-3 pt-4">
+        <img src="{% static 'logo.png' %}" alt="ONEE" class="w-10 h-10 rounded-full object-cover border-2 border-white">
+        <span>ONEE RH</span>
+      </div>
+      <nav class="flex flex-col gap-2">
+        <a href="#" class="sidebar-link active flex items-center gap-3 hover:bg-blue-700 p-3 rounded-lg">
+          <i class="fas fa-tachometer-alt w-5 text-center"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{% url 'liste_offr' %}" class="sidebar-link flex items-center gap-3 hover:bg-blue-700 p-3 rounded-lg">
+          <i class="fas fa-briefcase w-5 text-center"></i>
+          <span>Offres</span>
+        </a>
+        
+        <a href="#" class="sidebar-link flex items-center gap-3 hover:bg-blue-700 p-3 rounded-lg mt-4">
+          <i class="fas fa-cog w-5 text-center"></i>
+          <span>Paramètres</span>
+        </a>
+        <a href="#" class="sidebar-link flex items-center gap-3 hover:bg-red-600 p-3 rounded-lg mt-auto">
+          <i class="fas fa-sign-out-alt w-5 text-center"></i>
+          <span>Déconnexion</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <header class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800">Tableau de Bord RH</h1>
+          <p class="text-gray-500">Bienvenue, Administrateur</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input type="text" placeholder="Rechercher..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          <div class="relative">
+            <i class="fas fa-bell text-xl text-gray-600 cursor-pointer"></i>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+          </div>
+          <div class="flex items-center gap-2">
+           
+            <span class="font-medium">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="card bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 font-medium">Offres publiées</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-2">{{ offres_count }}</h3>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-lg">
+              <i class="fas fa-briefcase text-blue-600 text-xl"></i>
+            </div>
+          </div>
+          <p class="text-green-600 text-sm mt-2"><i class="fas fa-arrow-up"></i> 12% depuis le mois dernier</p>
+        </div>
+
+        <div class="card bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 font-medium">Candidatures</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-2">{{ candidature_count }}</h3>
+            </div>
+            <div class="bg-green-100 p-3 rounded-lg">
+              <i class="fas fa-file-alt text-green-600 text-xl"></i>
+            </div>
+          </div>
+          <p class="text-green-600 text-sm mt-2"><i class="fas fa-arrow-up"></i> 24% depuis le mois dernier</p>
+        </div>
+
+        <div class="card bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 font-medium">Entretiens</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-2">42</h3>
+            </div>
+            <div class="bg-purple-100 p-3 rounded-lg">
+              <i class="fas fa-handshake text-purple-600 text-xl"></i>
+            </div>
+          </div>
+          <p class="text-red-600 text-sm mt-2"><i class="fas fa-arrow-down"></i> 5% depuis le mois dernier</p>
+        </div>
+
+        <div class="card bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-gray-500 font-medium">Nouveaux employés</p>
+              <h3 class="text-3xl font-bold text-gray-800 mt-2">15</h3>
+            </div>
+            <div class="bg-yellow-100 p-3 rounded-lg">
+              <i class="fas fa-users text-yellow-600 text-xl"></i>
+            </div>
+          </div>
+          <p class="text-green-600 text-sm mt-2"><i class="fas fa-arrow-up"></i> 8% depuis le mois dernier</p>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div class="card bg-white rounded-xl shadow-md p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800">Candidatures par statut</h2>
+            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option>Ce mois-ci</option>
+              <option>Ce trimestre</option>
+              <option>Cette année</option>
+            </select>
+          </div>
+          <canvas id="candidatureChart" class="w-full h-72"></canvas>
+        </div>
+
+        <div class="card bg-white rounded-xl shadow-md p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-gray-800">Offres par catégorie</h2>
+            <select class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option>Toutes catégories</option>
+              <option>Technique</option>
+              <option>Administratif</option>
+              <option>Direction</option>
+            </select>
+          </div>
+          <canvas id="offresCategorieChart" class="w-full h-72"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Activité récente</h2>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4 pb-4 border-b border-gray-100">
+            <div class="bg-blue-100 p-2 rounded-full">
+              <i class="fas fa-user-plus text-blue-600"></i>
+            </div>
+            <div>
+              <p class="font-medium">Nouvelle candidature reçue</p>
+              <p class="text-sm text-gray-500">Mohamed Ali a postulé pour le poste de Développeur Fullstack</p>
+              <p class="text-xs text-gray-400 mt-1">Il y a 2 heures</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 pb-4 border-b border-gray-100">
+            <div class="bg-green-100 p-2 rounded-full">
+              <i class="fas fa-check-circle text-green-600"></i>
+            </div>
+            <div>
+              <p class="font-medium">Candidature approuvée</p>
+              <p class="text-sm text-gray-500">La candidature de Fatima Zahra a été approuvée pour l'entretien</p>
+              <p class="text-xs text-gray-400 mt-1">Aujourd'hui, 10:45</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-purple-100 p-2 rounded-full">
+              <i class="fas fa-briefcase text-purple-600"></i>
+            </div>
+            <div>
+              <p class="font-medium">Nouvelle offre publiée</p>
+              <p class="text-sm text-gray-500">"Ingénieur Systèmes" a été publié sur la plateforme</p>
+              <p class="text-xs text-gray-400 mt-1">Hier, 16:30</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JSON data -->
+      {{ candidatures_statut|json_script:"candidature-data" }}
+      {{ offres_categorie|json_script:"categorie-data" }}
+    </main>
+  </div>
+
+  <!-- Chart JS logic -->
+  <script>
+    const candidatureRaw = JSON.parse(document.getElementById('candidature-data').textContent);
+    const categorieRaw = JSON.parse(document.getElementById('categorie-data').textContent);
+
+    const candidatureLabels = candidatureRaw.map(item => item.statut);
+    const candidatureCounts = candidatureRaw.map(item => item.total);
+
+    const categorieLabels = categorieRaw.map(item => item.categorie);
+    const categorieCounts = categorieRaw.map(item => item.total);
+
+    // Candidature Chart
+    new Chart(document.getElementById('candidatureChart'), {
+      type: 'bar',
+      data: {
+        labels: candidatureLabels,
+        datasets: [{
+          label: 'Nombre de candidatures',
+          data: candidatureCounts,
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(16, 185, 129, 0.7)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(239, 68, 68, 0.7)'
+          ],
+          borderColor: [
+            'rgba(59, 130, 246, 1)',
+            'rgba(16, 185, 129, 1)',
+            'rgba(245, 158, 11, 1)',
+            'rgba(239, 68, 68, 1)'
+          ],
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: { size: 14 },
+            bodyFont: { size: 12 },
+            padding: 12,
+            cornerRadius: 4
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+
+    // Offres Catégorie Chart
+    new Chart(document.getElementById('offresCategorieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: categorieLabels,
+        datasets: [{
+          data: categorieCounts,
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(16, 185, 129, 0.7)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(156, 163, 175, 0.7)',
+            'rgba(139, 92, 246, 0.7)'
+          ],
+          borderColor: 'rgba(255, 255, 255, 0.8)',
+          borderWidth: 2,
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              boxWidth: 12,
+              padding: 16,
+              font: {
+                size: 12
+              },
+              usePointStyle: true,
+              pointStyle: 'circle'
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: { size: 14 },
+            bodyFont: { size: 12 },
+            padding: 12,
+            cornerRadius: 4
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

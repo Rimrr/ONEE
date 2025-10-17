@@ -1,0 +1,326 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Candidat - ONEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066b3;
+            --primary-light: #e6f2fa;
+            --primary-gradient: linear-gradient(135deg, #0066b3 0%, #38b6ff 100%);
+            --secondary: #ff6b00;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --error: #d8000c;
+            --success: #28a745;
+            --border-radius: 12px;
+            --box-shadow: 0 12px 24px rgba(0, 102, 179, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('https://images.unsplash.com/photo-1413882353314-73389f63b6fd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(31, 100, 153, 0.37);
+            padding: 2rem;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 440px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
+            background-color: rgba(255, 255, 255, 0.61);
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--primary-gradient);
+        }
+        
+        .onee-logo {
+            display: block;
+            margin: 0 auto 1.5rem;
+            width: 170px;
+            height: auto;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem; /* Augmenté légèrement */
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem; /* Augmenté légèrement */
+            font-size: 0.95rem;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.3rem; /* Augmenté légèrement */
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #f9fafb;
+            height: 48px; /* Hauteur fixe ajoutée */
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background-color: white;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px; /* Ajusté */
+            top: 42px; /* Ajusté pour correspondre à la nouvelle hauteur */
+            cursor: pointer;
+            color: #9ca3af;
+            transition: var(--transition);
+            font-size: 1.1rem; /* Légèrement agrandi */
+        }
+        
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 1.1rem; /* Légèrement augmenté */
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 0.8rem; /* Augmenté légèrement */
+            box-shadow: 0 4px 6px rgba(0, 102, 179, 0.1);
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 102, 179, 0.15);
+            background: linear-gradient(135deg, #005599 0%, #2a9cf5 100%);
+        }
+        
+        .messages {
+            margin: 1.5rem 0 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .messages li {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .error {
+            background-color: #fee2e2;
+            color: var(--error);
+            border-left: 4px solid var(--error);
+        }
+        
+        .success {
+            background-color: #dcfce7;
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+        
+        .footer-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .login-container {
+                padding: 1.5rem;
+            }
+            
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-control {
+                padding: 0.9rem 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="https://media.licdn.com/dms/image/v2/D4E3DAQF1yCjYseaNzQ/image-scale_191_1128/image-scale_191_1128/0/1723823935433/office_national_de_llectricit_et_de_leau_potable_onee_cover?e=2147483647&v=beta&t=DBt6O9TtsdbNL51iwPYsfvvdMUmB7KjB5A8nNQaRXgU" alt="ONEE Logo" class="onee-logo">
+        
+        <div class="login-header">
+            <h1>Espace Candidat</h1>
+            <p>Connectez-vous pour accéder à votre espace personnel</p>
+        </div>
+        
+        <form method="post" id="loginForm">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                <input type="email" id="id_email" name="email" class="form-control" required>
+                {% if form.email.errors %}
+                    <div class="error">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.mot_de_passe.id_for_label }}">Mot de passe</label>
+                <input type="password" id="id_mot_de_passe" name="mot_de_passe" class="form-control" required>
+                <span class="password-toggle" id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                </span>
+                {% if form.mot_de_passe.errors %}
+                    <div class="error">{{ form.mot_de_passe.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn-login">Se connecter</button>
+        </form>
+        
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <div class="footer-links">
+            <a href="{% url 'candidat_register' %}">Créer un compte</a> • <a href="#">Mot de passe oublié ?</a>
+        </div>
+    </div>
+    
+    <script>
+        // Password toggle functionality
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('id_mot_de_passe');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const email = document.getElementById('id_email');
+            const password = document.getElementById('id_mot_de_passe');
+            let valid = true;
+            
+            if (!email.value.trim()) {
+                email.style.borderColor = 'var(--error)';
+                valid = false;
+            }
+            
+            if (!password.value.trim()) {
+                password.style.borderColor = 'var(--error)';
+                valid = false;
+            }
+            
+            if (!valid) {
+                e.preventDefault();
+            }
+        });
+
+        // Reset error states on input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.style.borderColor = '#e5e7eb';
+            });
+        });
+    </script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</body>
+</html>

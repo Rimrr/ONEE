@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidatures - ONEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066b3;
+            --primary-light: #e6f2fa;
+            --primary-gradient: linear-gradient(135deg, #0066b3 0%, #38b6ff 100%);
+            --secondary: #ff6b00;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --error: #d8000c;
+            --success: #28a745;
+            --border-radius: 12px;
+            --box-shadow: 0 12px 24px rgba(0, 102, 179, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 2rem;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .offre-info {
+            background-color: var(--primary-light);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        th, td {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        tr:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-en-attente {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-en-cours {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-accepte {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-refuse {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        select {
+            padding: 0.6rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius);
+            background-color: #f9fafb;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            margin-right: 0.5rem;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .btn-update {
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-update:hover {
+            background: #005599;
+            transform: translateY(-1px);
+        }
+        
+        .no-candidates {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Candidatures pour {{ offre.titre }}</h1>
+        <div class="offre-info">
+            Poste: {{ offre.titre }} 
+        </div>
+         <a href="{% url 'export_candidatures' offre.id %}" 
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
+      <i class="fas fa-file-export mr-2"></i> Exporter
+    </a>
+        
+        {% if candidatures %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <th>Changer le statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in candidatures %}
+                <tr>
+                    <td>{{ c.candidat.nom }} {{ c.candidat.prenom }}</td>
+                    <td>{{ c.candidat.email }}</td>
+                    <td>
+                        <span class="status status-{{ c.statut }}">{{ c.get_statut_display }}</span>
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'modifier_statut_candidature' c.id %}" class="status-form">
+                            {% csrf_token %}
+                            <select name="statut">
+                                {% for key, label in c.STATUTS %}
+                                    <option value="{{ key }}" {% if c.statut == key %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn-update">Mettre à jour</button>
+                            <button>
+                  <a href="{% url 'detail_candidature' c.id %}" class="text-blue-600 hover:underline text-xs">Détails</a>
+                </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-candidates">
+            Aucune candidature n'a été reçue pour cette offre pour le moment.
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

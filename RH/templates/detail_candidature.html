@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Candidature | TalentConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-new {
+            background-color: #e3f2fd;
+            color: var(--primary);
+        }
+        
+        .status-in-review {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+        
+        .status-accepted {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-rejected {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            font-size: 22px;
+            font-weight: 500;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .info-value {
+            font-size: 16px;
+            color: var(--dark);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .social-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .social-link:hover {
+            color: var(--secondary);
+        }
+        
+        .document-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .document-item {
+            background: #f5f7fa;
+            border-radius: 6px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: calc(50% - 8px);
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .document-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .document-icon {
+            color: var(--primary);
+            font-size: 20px;
+        }
+        
+        .document-name {
+            font-weight: 500;
+            flex-grow: 1;
+        }
+        
+        .document-size {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .document-item {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Détails de la Candidature</h1>
+            <span class="status-badge status-{{ candidature.statut|lower }}">{{ candidature.get_statut_display }}</span>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Informations du Candidat</h2>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Nom complet</span>
+                    <span class="info-value">{{ candidature.candidat.prenom }} {{ candidature.candidat.nom }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">{{ candidature.candidat.email }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Téléphone</span>
+                    <span class="info-value">{{ candidature.candidat.telephone }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Localisation</span>
+                    <span class="info-value">{{ candidature.candidat.ville }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Titre de profil</span>
+                    <span class="info-value">{{ candidature.candidat.titre_profil }}</span>
+                </div>
+                
+                <div class="info-item" style="grid-column: span 2;">
+                    <span class="info-label">Résumé professionnel</span>
+                    <span class="info-value">{{ candidature.candidat.resume_professionnel }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Réseaux sociaux</span>
+                    <div class="social-links">
+                        {% if candidature.candidat.linkedin_url %}
+                        <a href="{{ candidature.candidat.linkedin_url }}" class="social-link" target="_blank">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        {% endif %}
+                        
+                        {% if candidature.candidat.github_url %}
+                        <a href="{{ candidature.candidat.github_url }}" class="social-link" target="_blank">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Détails de l'Offre</h2>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Titre de l'offre</span>
+                    <span class="info-value">{{ candidature.offre.titre }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Catégorie</span>
+                    <span class="info-value">{{ candidature.offre.categorie }}</span>
+                </div>
+                
+                <div class="info-item" style="grid-column: span 2;">
+                    <span class="info-label">Description</span>
+                    <span class="info-value">{{ candidature.offre.description }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Détails de la Candidature</h2>
+            <span class="info-value">{{ candidature.date_postulation }}</span>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Niveau d'études</span>
+                    <span class="info-value">{{ candidature.niveau_etude }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Années d'expérience</span>
+                    <span class="info-value">{{ candidature.annee_experience }}</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Permis de conduire</span>
+                    <span class="info-value">{{ candidature.permis|yesno:"Oui,Non" }}</span>
+                </div>
+            </div>
+            
+            <h3 style="margin: 20px 0 15px; font-size: 18px; color: var(--secondary);">Documents joints</h3>
+            <div class="document-list">
+
+    {% if candidature.cv %}
+        <a href="{{ candidature.cv.url }}" class="document-item" target="_blank">
+            <i class="fas fa-file-alt document-icon"></i>
+            <span class="document-name">Curriculum Vitae</span>
+            <span class="document-size">PDF</span>
+        </a>
+    {% else %}
+        <div class="document-item missing">
+            <i class="fas fa-exclamation-circle text-warning"></i>
+            <span class="document-name">Curriculum Vitae</span>
+            <span class="document-size">Non fourni</span>
+        </div>
+    {% endif %}
+
+    {% if candidature.lettre_de_motivation %}
+        <a href="{{ candidature.lettre_de_motivation.url }}" class="document-item" target="_blank">
+            <i class="fas fa-file-alt document-icon"></i>
+            <span class="document-name">Lettre de motivation</span>
+            <span class="document-size">PDF</span>
+        </a>
+    {% else %}
+        <div class="document-item missing">
+            <i class="fas fa-exclamation-circle text-warning"></i>
+            <span class="document-name">Lettre de motivation</span>
+            <span class="document-size">Non fournie</span>
+        </div>
+    {% endif %}
+
+    {% if candidature.cin %}
+        <a href="{{ candidature.cin.url }}" class="document-item" target="_blank">
+            <i class="fas fa-id-card document-icon"></i>
+            <span class="document-name">Carte d'identité nationale</span>
+            <span class="document-size">PDF</span>
+        </a>
+    {% else %}
+        <div class="document-item missing">
+            <i class="fas fa-exclamation-circle text-warning"></i>
+            <span class="document-name">Carte d'identité nationale</span>
+            <span class="document-size">Non fournie</span>
+        </div>
+    {% endif %}
+
+    {% if candidature.diplome %}
+        <a href="{{ candidature.diplome.url }}" class="document-item" target="_blank">
+            <i class="fas fa-graduation-cap document-icon"></i>
+            <span class="document-name">Diplôme</span>
+            <span class="document-size">PDF</span>
+        </a>
+    {% else %}
+        <div class="document-item missing">
+            <i class="fas fa-exclamation-circle text-warning"></i>
+            <span class="document-name">Diplôme</span>
+            <span class="document-size">Non fourni</span>
+        </div>
+    {% endif %}
+
+</div>
+
+        </div>
+        
+        
+    </div>
+</body>
+</html>

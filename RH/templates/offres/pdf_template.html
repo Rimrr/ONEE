@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        #header {
+            width: 100%;
+            border-bottom: 2px solid #796ACD;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            overflow: auto;
+        }
+
+        .logo {
+            height: 50px;
+            float: left;
+        }
+
+        .header-info {
+            float: right;
+            text-align: right;
+            font-size: 10pt;
+            color: #64748B;
+        }
+
+        h1 {
+            color: #796ACD;
+            font-size: 22pt;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #3B82F6;
+            font-size: 16pt;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        table.meta {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        table.meta td {
+            vertical-align: top;
+            padding: 5px 10px;
+            width: 50%;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            color: #64748B;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .meta-value {
+            background: #F0F0F0;
+            padding: 6px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-content {
+            background: #F0F0F0;
+            padding: 10px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-size: 10pt;
+            color: #64748B;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKRIuR5SAAUn31QNh23CgEtQg-_WSq97nSUA&s" class="logo" alt="Company Logo">
+        <div class="header-info">
+            <div>Fiche Offre d'Emploi</div>
+            <div>{{ offre.date_publication|date:"d/m/Y" }}</div>
+        </div>
+    </div>
+
+    <h1>{{ offre.titre }}</h1>
+
+    <table class="meta">
+        <tr>
+            <td>
+                <span class="meta-label">Référence</span>
+                <div class="meta-value">#{{ offre.id }}</div>
+            </td>
+            <td>
+                <span class="meta-label">Catégorie</span>
+                <div class="meta-value">{{ offre.get_categorie_display }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="meta-label">Type de contrat</span>
+                <div class="meta-value">{{ offre.type_contrat|default:"Non spécifié" }}</div>
+            </td>
+            <td>
+                <span class="meta-label">Localisation</span>
+                <div class="meta-value">{{ offre.localisation|default:"Non spécifiée" }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="meta-label">Salaire</span>
+                <div class="meta-value">
+                    {% if offre.salaire %}
+                        {{ offre.salaire }} MAD
+                    {% else %}
+                        À négocier
+                    {% endif %}
+                </div>
+            </td>
+            <td>
+                <span class="meta-label">Expérience requise</span>
+                <div class="meta-value">{{ offre.experience_requise|default:"Non spécifiée" }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="meta-label">Niveau d'étude</span>
+                <div class="meta-value">{{ offre.niveau_etude|default:"Non spécifié" }}</div>
+            </td>
+            <td>
+                <span class="meta-label">Nombre de postes</span>
+                <div class="meta-value">{{ offre.nombre_postes }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="meta-label">Date de publication</span>
+                <div class="meta-value">{{ offre.date_publication }}</div>
+            </td>
+            <td>
+                <span class="meta-label">Date d'expiration</span>
+                <div class="meta-value">
+                    {{ offre.date_expiration }}
+                    {% if offre.is_active %}
+                        <span style="color: #10B981;">(Active)</span>
+                    {% else %}
+                        <span style="color: #EF4444;">(Expirée)</span>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="section">
+        <h2>Description du poste</h2>
+        <div class="section-content">
+            {{ offre.description|linebreaks }}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Exigences et compétences</h2>
+        <div class="section-content">
+            {{ offre.exigences|default:"Aucune exigence spécifique mentionnée."|linebreaks }}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© {% now "Y" %} Nom de votre entreprise - Tous droits réservés</p>
+        <p>www.votreentreprise.com | contact@votreentreprise.com | Tél: +212 5 00 00 00 00</p>
+    </div>
+</body>
+</html>

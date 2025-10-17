@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Candidatures - ONEE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="flex">
+    <!-- Sidebar -->
+    <div class="w-64 bg-blue-800 text-white h-screen sticky top-0">
+      <div class="p-4 flex items-center border-b border-blue-700">
+        <img src="https://seeklogo.com/images/O/one-maroc-logo-53714E962D-seeklogo.com.png" alt="Logo ONEE" class="h-10 mr-3">
+        <span class="text-xl font-semibold">ONEE Recrutement</span>
+      </div>
+      <nav class="p-4">
+        <ul class="space-y-2">
+          <li>
+            <a href="#" class="flex items-center p-2 rounded hover:bg-blue-700 transition">
+              <i class="fas fa-home w-5 mr-3"></i> Tableau de bord
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'liste_offres_candidat' %}" class="flex items-center p-2 rounded bg-blue-700">
+              <i class="fas fa-briefcase w-5 mr-3"></i> Offres d'emploi
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'mes_candidatures' %}" class="flex items-center p-2 rounded hover:bg-blue-700 transition">
+              <i class="fas fa-user w-5 mr-3"></i> Candidatures
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'modifier_profil' %}" class="flex items-center p-2 rounded hover:bg-blue-700 transition">
+              <i class="fas fa-cog w-5 mr-3"></i> Profil
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex-1">
+      <div class="bg-gradient-to-r from-blue-700 to-indigo-600 text-white py-6 px-8 rounded-b-2xl shadow-md mb-6">
+        <h1 class="text-2xl font-semibold mb-2"><i class="fas fa-file-alt mr-2"></i> Mes Candidatures</h1>
+        <nav class="text-sm">
+          <a href="{% url 'candidat_dashboard' %}" class="hover:underline text-gray-200"><i class="fas fa-home mr-1"></i>Dashboard</a>
+          <span class="mx-2">/</span>
+          <span>Mes Candidatures</span>
+        </nav>
+      </div>
+
+      <div class="px-6">
+        <div class="bg-white rounded-lg shadow-md p-4">
+          {% if candidatures %}
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm text-left">
+                <thead class="bg-blue-700 text-white">
+                  <tr>
+                    <th class="p-4">Offre</th>
+                    <th class="p-4">Entreprise</th>
+                    <th class="p-4">Date</th>
+                    <th class="p-4">Statut</th>
+                    <th class="p-4">Documents</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for candidature in candidatures %}
+                  <tr class="border-b hover:bg-blue-50">
+                    <td class="p-4">
+                      <div class="font-medium">{{ candidature.offre.titre }}</div>
+                      <div class="text-gray-500 text-xs">{{ candidature.offre.get_categorie_display }}</div>
+                    </td>
+                    <td class="p-4 flex items-center space-x-2">
+                      <img src="https://seeklogo.com/images/O/one-maroc-logo-53714E962D-seeklogo.com.png" alt="ONEE" class="w-7 h-7 rounded-full">
+                      <span>ONEE</span>
+                    </td>
+                    <td class="p-4">{{ candidature.date_postulation|date:"d/m/Y" }}</td>
+                    <td class="p-4">
+                      <span class="inline-flex items-center gap-1 text-sm px-3 py-1 rounded-full font-medium 
+                        {% if candidature.statut == 'ACCEPTEE' %}bg-green-100 text-green-600
+                        {% elif candidature.statut == 'REFUSEE' %}bg-red-100 text-red-600
+                        {% elif 'concours' in candidature.statut %}bg-blue-100 text-blue-600
+                        {% else %}bg-yellow-100 text-yellow-600{% endif %}">
+                        <i class="fas 
+                          {% if candidature.statut == 'ACCEPTEE' %}fa-check-circle
+                          {% elif candidature.statut == 'REFUSEE' %}fa-times-circle
+                          {% elif 'concours' in candidature.statut %}fa-edit
+                          {% else %}fa-clock{% endif %}"></i>
+                        {{ candidature.get_statut_display }}
+                      </span>
+                    </td>
+                    <td class="p-4 flex gap-2">
+                     <td class="p-4 flex gap-2 text-xl">
+  {% if candidature.cv %}
+    <a href="{{ candidature.cv.url }}" target="_blank" class="text-blue-600 hover:text-blue-800" title="CV">
+      <i class="fas fa-file-pdf"></i>
+    </a>
+  {% endif %}
+  {% if candidature.lettre_de_motivation %}
+    <a href="{{ candidature.lettre_de_motivation.url }}" target="_blank" class="text-blue-600 hover:text-blue-800" title="Lettre de motivation">
+      <i class="fas fa-file-alt"></i>
+    </a>
+  {% endif %}
+  {% if candidature.diplome %}
+    <a href="{{ candidature.diplome.url }}" target="_blank" class="text-blue-600 hover:text-blue-800" title="Diplôme">
+      <i class="fas fa-graduation-cap"></i>
+    </a>
+  {% endif %}
+</td>
+
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-center py-16 text-gray-600">
+              <i class="far fa-folder-open text-4xl mb-4"></i>
+              <h3 class="text-xl font-semibold mb-2">Aucune candidature trouvée</h3>
+              <p class="mb-4">Vous n'avez postulé à aucune offre pour le moment.</p>
+              <a href="{% url 'liste_offres_candidat' %}" class="inline-flex items-center px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800">
+                <i class="fas fa-briefcase mr-2"></i> Voir les offres disponibles
+              </a>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if candidatures.has_other_pages %}
+        <div class="mt-6">
+          <nav class="flex justify-center">
+            <ul class="inline-flex -space-x-px">
+              {% if candidatures.has_previous %}
+              <li><a href="?page={{ candidatures.previous_page_number }}" class="px-3 py-2 bg-white border rounded-l hover:bg-gray-100"><i class="fas fa-chevron-left"></i></a></li>
+              {% endif %}
+              {% for num in candidatures.paginator.page_range %}
+              <li>
+                {% if candidatures.number == num %}
+                <span class="px-3 py-2 bg-blue-700 text-white border">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="px-3 py-2 bg-white border hover:bg-gray-100">{{ num }}</a>
+                {% endif %}
+              </li>
+              {% endfor %}
+              {% if candidatures.has_next %}
+              <li><a href="?page={{ candidatures.next_page_number }}" class="px-3 py-2 bg-white border rounded-r hover:bg-gray-100"><i class="fas fa-chevron-right"></i></a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

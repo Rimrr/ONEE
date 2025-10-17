@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des Offres</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+
+  <h1 class="text-3xl font-bold text-center mb-8">Offres d'emploi chez ONEE</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for offre in offres %}
+    <div class="bg-white shadow-md rounded-lg overflow-hidden p-5 relative">
+      <div class="flex items-center mb-4">
+        <img src="https://seeklogo.com/images/O/one-maroc-logo-53714E962D-seeklogo.com.png" alt="ONEE Logo" class="w-12 h-12 mr-3">
+        <h2 class="text-xl font-semibold text-gray-800">{{ offre.titre }}</h2>
+      </div>
+
+      <p class="text-sm text-gray-500 mb-2"><strong>Catégorie :</strong> {{ offre.get_categorie_display }}</p>
+      <p class="text-sm text-gray-600 mb-2"><strong>Contrat :</strong> {{ offre.type_contrat }}</p>
+      <p class="text-sm text-gray-600 mb-2"><strong>Localisation :</strong> {{ offre.localisation }}</p>
+      <p class="text-sm text-gray-600 mb-4"><strong>Salaire :</strong> {{ offre.salaire }} DH</p>
+      
+      <a href="{% url 'candidats_par_offre' offre.id %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded">
+        Voir les candidats
+      </a>
+      <a href="{% url 'detail_offrerh' offre.id %}" class="inline-block bg-gray-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded">
+        Détails de l'offre
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

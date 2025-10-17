@@ -1,0 +1,441 @@
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postuler à {{ offre.titre }} | ONEE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0066b3;
+            --primary-dark: #005599;
+            --primary-light: #e6f2fa;
+            --secondary: #ff6b00;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --error: #e63946;
+            --success: #28a745;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0, 102, 179, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+        }
+
+        .application-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .application-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 2rem;
+            position: relative;
+        }
+
+        .application-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            opacity: 0.1;
+        }
+
+        .application-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .application-header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .application-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #f8fafc;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background-color: white;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background-color: #f8fafc;
+            border: 1px dashed #cbd5e0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--primary);
+            background-color: #edf2f7;
+        }
+
+        .file-upload-text {
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+
+        .file-upload-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 179, 0.2);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .required-field::after {
+            content: '*';
+            color: var(--error);
+            margin-left: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .application-container {
+                margin: 1rem;
+            }
+            
+            .application-header {
+                padding: 1.25rem;
+            }
+            
+            .application-body {
+                padding: 1.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="application-container">
+        <div class="application-header">
+            <h2>Postuler à : {{ offre.titre }}</h2>
+            <p>Veuillez compléter le formulaire de candidature</p>
+        </div>
+        
+        <div class="application-body">
+            <form method="post" enctype="multipart/form-data" class="application-form">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="form-group">
+                        <div class="error-message">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Niveau d'étude et Années d'expérience -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.niveau_etude.id_for_label }}" class="form-label required-field">Niveau d'étude</label>
+                        <select name="{{ form.niveau_etude.name }}" 
+                                id="{{ form.niveau_etude.id_for_label }}" 
+                                class="form-control" required>
+                            {% for value, label in form.niveau_etude.field.choices %}
+                                <option value="{{ value }}" {% if form.niveau_etude.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.niveau_etude.errors %}
+                            <div class="error-message">{{ form.niveau_etude.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.annee_experience.id_for_label }}" class="form-label required-field">Années d'expérience</label>
+                        <input type="number" 
+                               name="{{ form.annee_experience.name }}" 
+                               id="{{ form.annee_experience.id_for_label }}" 
+                               class="form-control" 
+                               min="0" 
+                               value="{{ form.annee_experience.value|default_if_none:'0' }}" 
+                               required>
+                        {% if form.annee_experience.errors %}
+                            <div class="error-message">{{ form.annee_experience.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Lettre de motivation -->
+                <div class="form-group">
+                    <label for="{{ form.lettre_de_motivation.id_for_label }}" class="form-label required-field">Lettre de motivation</label>
+                    <div class="file-upload">
+                        <label for="{{ form.lettre_de_motivation.id_for_label }}" class="file-upload-label">
+                            <span class="file-upload-text">Choisir un fichier (PDF, DOC, DOCX)</span>
+                            <i class="fas fa-upload file-upload-icon"></i>
+                        </label>
+                        <input type="file" name="{{ form.lettre_de_motivation.name }}" 
+                               id="{{ form.lettre_de_motivation.id_for_label }}" 
+                               class="file-upload-input" 
+                               accept=".pdf,.doc,.docx" required>
+                        <div id="lettre-de-motivation-name" class="file-name">
+                            {% if form.lettre_de_motivation.value %}
+                                {{ form.lettre_de_motivation.value.name }}
+                            {% else %}
+                                Aucun fichier sélectionné
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if form.lettre_de_motivation.errors %}
+                        <div class="error-message">{{ form.lettre_de_motivation.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- CV -->
+                <div class="form-group">
+                    <label for="{{ form.cv.id_for_label }}" class="form-label required-field">Curriculum Vitae (CV)</label>
+                    <div class="file-upload">
+                        <label for="{{ form.cv.id_for_label }}" class="file-upload-label">
+                            <span class="file-upload-text">Choisir un fichier (PDF, DOC, DOCX)</span>
+                            <i class="fas fa-upload file-upload-icon"></i>
+                        </label>
+                        <input type="file" name="{{ form.cv.name }}" 
+                               id="{{ form.cv.id_for_label }}" 
+                               class="file-upload-input" 
+                               accept=".pdf,.doc,.docx" required>
+                        <div id="cv-name" class="file-name">
+                            {% if form.cv.value %}
+                                {{ form.cv.value.name }}
+                            {% else %}
+                                Aucun fichier sélectionné
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if form.cv.errors %}
+                        <div class="error-message">{{ form.cv.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- CIN -->
+                <div class="form-group">
+                    <label for="{{ form.cin.id_for_label }}" class="form-label required-field">Carte Nationale d'Identité (CIN)</label>
+                    <div class="file-upload">
+                        <label for="{{ form.cin.id_for_label }}" class="file-upload-label">
+                            <span class="file-upload-text">Choisir un fichier (PDF, JPG, PNG)</span>
+                            <i class="fas fa-upload file-upload-icon"></i>
+                        </label>
+                        <input type="file" name="{{ form.cin.name }}" 
+                               id="{{ form.cin.id_for_label }}" 
+                               class="file-upload-input" 
+                               accept=".pdf,.jpg,.png" required>
+                        <div id="cin-name" class="file-name">
+                            {% if form.cin.value %}
+                                {{ form.cin.value.name }}
+                            {% else %}
+                                Aucun fichier sélectionné
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if form.cin.errors %}
+                        <div class="error-message">{{ form.cin.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Diplôme -->
+                <div class="form-group">
+                    <label for="{{ form.diplome.id_for_label }}" class="form-label required-field">Diplôme</label>
+                    <div class="file-upload">
+                        <label for="{{ form.diplome.id_for_label }}" class="file-upload-label">
+                            <span class="file-upload-text">Choisir un fichier (PDF, JPG, PNG)</span>
+                            <i class="fas fa-upload file-upload-icon"></i>
+                        </label>
+                        <input type="file" name="{{ form.diplome.name }}" 
+                               id="{{ form.diplome.id_for_label }}" 
+                               class="file-upload-input" 
+                               accept=".pdf,.jpg,.png" required>
+                        <div id="diplome-name" class="file-name">
+                            {% if form.diplome.value %}
+                                {{ form.diplome.value.name }}
+                            {% else %}
+                                Aucun fichier sélectionné
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if form.diplome.errors %}
+                        <div class="error-message">{{ form.diplome.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Message complémentaire -->
+               
+                
+                <div class="form-group">
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i> Envoyer la candidature
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Update file name when a file is selected
+        document.querySelectorAll('.file-upload-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const fileName = this.files[0] ? this.files[0].name : 'Aucun fichier sélectionné';
+                const displayElement = document.getElementById(`${this.id}-name`);
+                if (displayElement) {
+                    displayElement.textContent = fileName;
+                }
+            });
+        });
+
+        // Form validation
+        document.querySelector('.application-form').addEventListener('submit', function(e) {
+            let valid = true;
+            
+            // Check required fields
+            const requiredFields = [
+                ...document.querySelectorAll('.file-upload-input[required]'),
+                document.getElementById('{{ form.niveau_etude.id_for_label }}'),
+                document.getElementById('{{ form.annee_experience.id_for_label }}')
+            ];
+            
+            requiredFields.forEach(field => {
+                if (field.type === 'file' && (!field.files || field.files.length === 0)) {
+                    const label = field.previousElementSibling;
+                    if (label) {
+                        label.style.borderColor = 'var(--error)';
+                        label.style.backgroundColor = '#fff5f5';
+                    }
+                    valid = false;
+                } else if (!field.value || field.value.trim() === '') {
+                    field.style.borderColor = 'var(--error)';
+                    valid = false;
+                }
+            });
+            
+            if (!valid) {
+                e.preventDefault();
+                alert('Veuillez remplir tous les champs obligatoires.');
+            }
+        });
+
+        // Reset error states on input
+        document.querySelectorAll('.form-control, .file-upload-input').forEach(input => {
+            input.addEventListener('change', function() {
+                this.style.borderColor = '#e2e8f0';
+                if (this.previousElementSibling) {
+                    this.previousElementSibling.style.borderColor = '#cbd5e0';
+                    this.previousElementSibling.style.backgroundColor = '#f8fafc';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

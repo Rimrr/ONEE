@@ -1,0 +1,74 @@
+{% extends "base_dashboard.html" %}
+{% block title %}Tableau de bord - ONEE{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-6">Tableau de bord</h1>
+
+<!-- KPIs -->
+<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    {% comment %} Exemple de chiffres statiques – remplace par tes données {% endcomment %}
+    {% for kpi in kpis %}
+    <div class="bg-white rounded-2xl shadow p-6">
+        <p class="text-gray-500">{{ kpi.label }}</p>
+        <p class="text-3xl font-bold">{{ kpi.value }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Graphiques -->
+<div class="grid gap-6 mt-10 lg:grid-cols-2">
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="font-semibold mb-4">Offres publiées / mois</h2>
+        <canvas id="offresChart"></canvas>
+    </div>
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="font-semibold mb-4">Répartition par catégorie</h2>
+        <canvas id="catChart"></canvas>
+    </div>
+</div>
+
+<script>
+/* --- Données passées depuis la vue Django (conseillé) --- */
+const labelsMonths = {{ labels_months|safe }};      // ex: ["Jan", "Fév", ...]
+const dataMonths   = {{ data_months|safe }};        // ex: [5, 8, 3, ...]
+const labelsCats   = {{ labels_cats|safe }};        // ex: ["Informatique", ...]
+const dataCats     = {{ data_cats|safe }};          // ex: [12, 7, 4, ...]
+
+/* --- Chart 1 : barres --- */
+new Chart(
+    document.getElementById('offresChart'),
+    {
+        type: 'bar',
+        data: {
+            labels: labelsMonths,
+            datasets: [{
+                label: 'Offres',
+                data: dataMonths,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+        }
+    }
+);
+
+/* --- Chart 2 : camembert --- */
+new Chart(
+    document.getElementById('catChart'),
+    {
+        type: 'doughnut',
+        data: {
+            labels: labelsCats,
+            datasets: [{
+                data: dataCats,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    }
+);
+</script>
+{% endblock %}
